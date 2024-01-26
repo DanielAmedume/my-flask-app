@@ -29,20 +29,20 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
 		# generate the tags that we'll use to name our image
-      - name: Get Docker metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: | # tag with commit hash and with 'latest'
-            type=sha 
-            type=raw,value=latest,enable={{is_default_branch}}
-		
-		# build and push our image, using output from previous step
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+    - name: Get Docker metadata
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/${{ github.repository }}
+        tags: | # tag with commit hash and with 'latest'
+          type=sha 
+          type=raw,value=latest,enable={{is_default_branch}}
+  
+  # build and push our image, using output from previous step
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
